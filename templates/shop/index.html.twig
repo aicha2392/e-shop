@@ -14,7 +14,10 @@
         <img class="card-img-top" src="{{ref.image}}" alt="{{ref.title}}">
         <div class="card-body">
             <h5 class="card-title">{{ref.title}}</h5>
-            <p class="card-text">{{ref.description}}</p>
+            <p class="card-text">
+            {{ ref.description|length > 50 ? ref.description|slice(0, 50) ~ '...' : ref.description}}
+            {# permet de reduire le texte de la description #}
+            </p>
             <p>{{ref.price.amount}}€</p>
             <a href="{{path ('app_shop_show',{'slug' : ref.slug})}}" class="btn btn-primary">Voir le détail</a>
         </div>
