@@ -36,8 +36,6 @@ class Article
         return $this->id;
     }
 
- 
-
     public function getQty(): ?int
     {
         return $this->qty;

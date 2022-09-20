@@ -1,0 +1,23 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} -Accueil{% endblock %}
+
+{% block body %}
+<section id="show" class="container">
+
+<div class="row">
+
+<div class="col-md-12 col-sm-12">
+        {# {{dump(references)}} #}
+        {# {{dump(ref.title)}} #}
+    <div class="card" style="width: 18rem;">
+        <img class="card-img-top" src="{{reference.image}}" alt="{{reference.title}}">
+        <div class="card-body">
+            <h5 class="card-title">{{reference.title}}</h5>
+            <p class="card-text">{{reference.description}}</p>
+            <p>{{reference.price.amount}}€</p>
+            <a href="#" class="btn btn-primary">Voir le détail</a>
+        </div>
+    </div>
+
+{% endblock %}
