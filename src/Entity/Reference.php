@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use App\Repository\ReferenceRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
@@ -29,6 +31,19 @@ class Reference
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
     private ?Price $price = null;
+
+
+    #[ORM\OneToMany(mappedBy: 'reference', targetEntity: Article::class)]
+    private Collection $articles;
+
+    private $colors;
+    private $size;
+
+    public function __construct()
+    {
+        $this->articles = new ArrayCollection();
+    }
+
 
     public function getId(): ?int
     {
@@ -94,5 +109,65 @@ class Reference
         $this->price = $price;
 
         return $this;
+    }
+
+    /**
+     * @return Collection<int, Article>
+     */
+    public function getArticles(): Collection
+    {
+        return $this->articles;
+    }
+
+    public function addArticle(Article $article): self
+    {
+        if (!$this->articles->contains($article)) {
+            $this->articles->add($article);
+            $article->setReference($this);
+        }
+
+        return $this;
+    }
+
+    public function removeArticle(Article $article): self
+    {
+        if ($this->articles->removeElement($article)) {
+            // set the owning side to null (unless already changed)
+            if ($article->getReference() === $this) {
+                $article->setReference(null);
+            }
+        }
+
+        return $this;
+    }
+
+
+    public function getColors():?array
+    {
+        $colors =[];
+        $articles = $this->getArticles();
+        
+        foreach ($articles as $article) {
+            if(!in_array ($article->getColor(), $colors)){
+                $colors[] = $article->getColor();
+            }
+        }
+        return $colors;
+
+    }
+
+
+    public function getSizes():?array
+    {
+        $sizes = [];
+        $articles = $this->getArticles();
+        
+        foreach ($articles as $article) {
+            if(!in_array ($article->getSize(), $sizes)){
+                $sizes[] = $article->getSize();
+            }
+        }
+        return $sizes;
+
     }
 }

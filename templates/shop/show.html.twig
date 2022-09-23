@@ -3,6 +3,7 @@
 {% block title %} -Accueil{% endblock %}
 
 {% block body %}
+
 <section id="show" class="container">
 
 <div class="row">
@@ -15,9 +16,40 @@
         <div class="card-body">
             <h5 class="card-title">{{reference.title}}</h5>
             <p class="card-text">{{reference.description}}</p>
+            <p>
+            {% for color in reference.colors %}
+                <ul>
+                    <li>{{color.name}}</li>
+                </ul>
+            {% endfor %}
+            </p>
+            <form action="{{path('app_cart_add')}}">
+                <input type="hidden" value="{{reference.id}}" name="ref_id">
+                    <select name="size" id="js-select-size">
+                        <option>Choississez une taille</option>
+                        {% for size in reference.sizes %}
+                        <option value ="{{size.id}}">{{size.name}}</option>
+                        {% endfor %}
+                    </select>
+                    <div id="display-colors"></div>
+                        <div class="my-3">
+                            <label for="qty" class="form-label">Quantité souhaitée</label>
+                            <input type="number" name="qty" class="form-control" id="qty" value="1">
+                        </div>
+                            <button type="submit" id="js-add-to-cart" class="btn btn-sm btn-dark d-none">Add to cart</button>
+                   
+            </form>
+
             <p>{{reference.price.amount}}€</p>
-            <a href="#" class="btn btn-primary">Voir le détail</a>
         </div>
     </div>
-
+</div>
+</section>
 {% endblock %}
+
+ {% block javascripts %}
+ <script>
+  const ref_id = JSON.parse('{{ reference.id | json_encode()}}');
+  handleAddToCart(ref_id);
+ </script>
+ {% endblock %}
